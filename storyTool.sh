@@ -5,7 +5,7 @@ set -euo pipefail
 
 mainMenu ()
 {
-    echo -e "\033[36m""Story Validator Tool""\e[0m"
+    echo -e "\033[36m""Story Validator Tool V 1""\e[0m"
     echo "1 Install Story Node"
     echo "2 Update Story Node"
     echo "3 Create validator"
