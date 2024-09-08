@@ -12,6 +12,9 @@ mainMenu ()
     echo "4 Get latest block height"
     echo "5 Get Validator dashboard link"
     echo "6 Get Validator Public and Private Keys"
+    echo "7 Start the services"
+    echo "8 Restart the services"
+    echo "9 Stop the services"
     echo "q Quit"
 }
 
@@ -139,7 +142,22 @@ do
             story validator export --export-evm-key
             cat $HOME/.story/story/config/private_key.txt
             echo
-            ;;  
+            ;;
+        "7") # Start the systemctl services
+            echo "Starting the Story and Story Geth services"
+            systemctl start story story-geth
+            echo
+            ;;
+        "8") # Restart the systemctl services
+            echo "Restarting the Story and Story Geth services"
+            systemctl restart story story-geth
+            echo
+            ;;
+        "9") # Stop the systemctl services
+            echo "Stoping the Story and Story Geth services"
+            systemctl stop story story-geth
+            echo
+            ;;
         "q") # quit the script entirely
             exit
             ;;
