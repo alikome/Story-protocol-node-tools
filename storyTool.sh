@@ -5,7 +5,7 @@ set -euo pipefail
 
 mainMenu ()
 {
-    echo -e "\033[36m""Story Validator Tool V 1""\e[0m"
+    echo -e "\033[36m""Story Validator Tool V 1.0.1""\e[0m"
     echo "1 Install Story Node"
     echo "2 Update Story Node"
     echo "3 Create validator"
@@ -15,6 +15,7 @@ mainMenu ()
     echo "7 Start the services"
     echo "8 Restart the services"
     echo "9 Stop the services"
+    echo "d Delete node, This step is irreversible"
     echo "q Quit"
 }
 
@@ -156,6 +157,15 @@ do
         "9") # Stop the systemctl services
             echo "Stoping the Story and Story Geth services"
             systemctl stop story story-geth
+            echo
+            ;;
+        "d") # quit the script entirely
+            echo "Deleting the node files and removing its systemctl services"
+            systemctl stop story story-geth
+            systemctl disable story story-geth
+            rm /etc/systemd/system/story.service /etc/systemd/system/story-geth.service
+            systemctl daemon-reload
+            rm -rf $HOME/.story
             echo
             ;;
         "q") # quit the script entirely
