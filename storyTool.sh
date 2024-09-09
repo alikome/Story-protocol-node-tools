@@ -165,11 +165,11 @@ do
             echo "This snapshot on block $block is provided by Mandragora"
             echo "Stoping the Story and Story Geth services"
             systemctl stop story story-geth
-            echo "Installing (wget, aria2c, pv, and lz4 if not available"
-            apt-get install wget lz4 aria2c pv
+            echo "Installing (aria2, pv, and lz4 if not available"
+            apt-get install wget lz4 aria2 pv
             echo "Downloading the snapshots"
-            wget -O geth_snapshot.lz4 https://snapshots.mandragora.io/geth_snapshot.lz4
-            wget -O story_snapshot.lz4 https://snapshots.mandragora.io/story_snapshot.lz4
+            aria2c -x 16 -s 16 https://snapshots.mandragora.io/geth_snapshot.lz4 -o geth_snapshot.lz4
+            aria2c -x 16 -s 16 https://snapshots.mandragora.io/story_snapshot.lz4 -o story_snapshot.lz4
             echo "Starting the extraction, this will take some time"
             mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
             rm -rf ~/.story/story/data
