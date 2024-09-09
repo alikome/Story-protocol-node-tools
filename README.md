@@ -18,10 +18,13 @@ a update function that can install the latest versions when available and a few 
 0 Apply the latest Snapshot<br>
 d Delete node
 
-![alt text](https://i.imgur.com/7Wdu7lZ.png)
+<p align="center">
+  <img src="https://i.imgur.com/7Wdu7lZ.png" />
+</p>
 
-Note: 
-1- This script must be run with root privileges 
+Note:  
+
+1- This script must be run with root privileges<br>
 2- This script is only for the linux-amd64-intel version
 
 # How to:
