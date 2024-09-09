@@ -181,6 +181,8 @@ do
             mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
             echo "Starting the Story and Story Geth services"
             systemctl start story story-geth
+            echo "cleaning up"
+            rm *.lz4
             echo
             ;;    
         "d") # quit the script entirely
