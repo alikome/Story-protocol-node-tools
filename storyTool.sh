@@ -5,7 +5,7 @@ set -euo pipefail
 
 mainMenu ()
 {
-    echo -e "\033[36m""Story Validator Tool V 1.0.1""\e[0m"
+    echo -e "\033[36m""Story Validator Tool V 1.0.2""\e[0m"
     echo "1 Install Story Node"
     echo "2 Update Story Node"
     echo "3 Create validator"
@@ -165,11 +165,11 @@ do
             echo "This snapshot on block $block is provided by Mandragora"
             echo "Stoping the Story and Story Geth services"
             systemctl stop story story-geth
-            echo "Installing (aria2, pv, and lz4 if not available"
-            apt-get install wget lz4 aria2 pv
+            echo "Installing (pv, and lz4 if not available"
+            apt-get install lz4 pv
             echo "Downloading the snapshots"
-            aria2c -x 16 -s 16 https://snapshots.mandragora.io/geth_snapshot.lz4 -o geth_snapshot.lz4
-            aria2c -x 16 -s 16 https://snapshots.mandragora.io/story_snapshot.lz4 -o story_snapshot.lz4
+            wget -O geth_snapshot.lz4 https://snapshots.mandragora.io/geth_snapshot.lz4
+            wget -O story_snapshot.lz4 https://snapshots.mandragora.io/story_snapshot.lz4
             echo "Starting the extraction, this will take some time"
             mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
             rm -rf ~/.story/story/data
