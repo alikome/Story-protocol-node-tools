@@ -74,7 +74,7 @@ createStoryGethServiceFile ()
 
         [Service]
         User=root
-        ExecStart=/bin/geth --iliad --syncmode full
+        ExecStart=/bin/geth --iliad --syncmode full --http --http.api eth,net,web3,engine --http.vhosts '*' --http.addr 0.0.0.0 --http.port 8545 --ws --ws.api eth,web3,net,txpool --ws.addr 0.0.0.0 --ws.port 8546
         Restart=on-failure
         RestartSec=3
         LimitNOFILE=4096
