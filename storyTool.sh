@@ -106,7 +106,7 @@ do
             createStoryConsensusServiceFile
             createStoryGethServiceFile
             echo "Adding Peers"
-            sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$(curl -sS https://story-testnet-rpc.polkachu.com/net_info | jq -r '.result.peers[] | "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr)"' | awk -F ':' '{print $1":"$(NF)}' | paste -sd, -)\"/" $HOME/.story/story/config/config.toml
+            sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$(curl -sS https://story-rpc.mandragora.io/net_info | jq -r '.result.peers[] | "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr)"' | awk -F ':' '{print $1":"$(NF)}' | paste -sd, -)\"/" $HOME/.story/story/config/config.toml
             echo "Restarting the services"
             sudo systemctl restart story
             sudo systemctl restart story-geth
