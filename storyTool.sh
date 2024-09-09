@@ -15,6 +15,7 @@ mainMenu ()
     echo "7 Start the services"
     echo "8 Restart the services"
     echo "9 Stop the services"
+    echo "0 Apply the latest Snapshot"
     echo "d Delete node, This step is irreversible"
     echo "q Quit"
 }
@@ -159,6 +160,29 @@ do
             systemctl stop story story-geth
             echo
             ;;
+        "0") # Apply snapshot
+            block=$(curl https://snapshots.mandragora.io/height.txt)
+            echo "This snapshot on block $block is provided by Mandragora"
+            echo "Stoping the Story and Story Geth services"
+            systemctl stop story story-geth
+            echo "Installing (wget, aria2c, pv, and lz4 if not available"
+            apt-get install wget lz4 aria2c pv
+            echo "Downloading the snapshots"
+            wget -O geth_snapshot.lz4 https://snapshots.mandragora.io/geth_snapshot.lz4
+            wget -O story_snapshot.lz4 https://snapshots.mandragora.io/story_snapshot.lz4
+            echo "Starting the extraction, this will take some time"
+            mv $HOME/.story/story/data/priv_validator_state.json $HOME/.story/priv_validator_state.json.backup
+            rm -rf ~/.story/story/data
+            rm -rf ~/.story/geth/iliad/geth/chaindata
+            sudo mkdir -p /root/.story/story/data
+            lz4 -d story_snapshot.lz4 | pv | sudo tar xv -C /root/.story/story/
+            sudo mkdir -p /root/.story/geth/iliad/geth/chaindata
+            lz4 -d geth_snapshot.lz4 | pv | sudo tar xv -C /root/.story/geth/iliad/geth/
+            mv $HOME/.story/priv_validator_state.json.backup $HOME/.story/story/data/priv_validator_state.json
+            echo "Starting the Story and Story Geth services"
+            systemctl start story story-geth
+            echo
+            ;;    
         "d") # quit the script entirely
             echo "Deleting the node files and removing its systemctl services"
             systemctl stop story story-geth
