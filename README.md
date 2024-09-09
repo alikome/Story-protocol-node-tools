@@ -15,5 +15,5 @@ Note: this script must be run woth root privileges
 Or
 
     wget https://raw.githubusercontent.com/alikome/Story-Protocol-Node/main/storyTool.sh
-    Bash storyTools.sh
+    bash storyTools.sh
 
