@@ -161,8 +161,8 @@ do
             echo
             ;;
         "0") # Apply snapshot
-            block=$(curl https://snapshots.mandragora.io/height.txt)
-            echo "This snapshot on block $block is provided by Mandragora"
+            block=$(curl -sS https://snapshots.mandragora.io/height.txt)
+            echo "This snapshot at block $block is provided by Mandragora"
             echo "Stoping the Story and Story Geth services"
             systemctl stop story story-geth
             echo "Installing (pv, and lz4 if not available"
