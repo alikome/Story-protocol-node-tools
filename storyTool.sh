@@ -20,6 +20,7 @@ mainMenu ()
     echo "q Quit"
 }
 
+
 installStoryGeth () # Story Geth install function
 {
     echo "Getting Story Geth..."
@@ -114,6 +115,7 @@ do
             echo
             ;;
         "2") # Update Story Node
+            echo "stopping the services"
             sudo systemctl stop story
             sudo systemctl stop story-geth
             rm /bin/geth | rm /bin/story
