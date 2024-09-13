@@ -5,21 +5,21 @@ set -euo pipefail
 
 mainMenu ()
 {
-    echo -e "\033[36m""Story Validator Tool V 1.0.2""\e[0m"
+    echo -e "\033[36m""Story Validator Tools""\e[0m"
     echo "1 Install Story Node"
-    echo "2 Update Story Node"
-    echo "3 Create validator"
-    echo "4 Get latest block height"
-    echo "5 Get Validator dashboard link"
-    echo "6 Get Validator Public and Private Keys"
-    echo "7 Start the services"
-    echo "8 Restart the services"
-    echo "9 Stop the services"
-    echo "0 Apply the latest Snapshot"
+    echo "2 Update Story Consesus"
+    echo "3 Update Story Geth"
+    echo "4 Create validator"
+    echo "5 Get latest block height"
+    echo "6 Get Validator dashboard link"
+    echo "7 Get Validator Public and Private Keys"
+    echo "8 Start the services"
+    echo "9 Restart the services"
+    echo "0 Stop the services"
+    echo "s Apply the latest Snapshot"
     echo "d Delete node, This step is irreversible"
     echo "q Quit"
 }
-
 
 installStoryGeth () # Story Geth install function
 {
@@ -29,7 +29,6 @@ installStoryGeth () # Story Geth install function
     tar xf story-geth.tar.gz
     cp geth*/geth /bin
     rm -rf geth*/ | rm story-geth.tar.gz
-            
 }
 
 installStoryConsensus () # Story Consensus install function
@@ -110,59 +109,95 @@ do
             echo "Adding Peers"
             sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$(curl -sS https://story-rpc.mandragora.io/net_info | jq -r '.result.peers[] | "\(.node_info.id)@\(.remote_ip):\(.node_info.listen_addr)"' | awk -F ':' '{print $1":"$(NF)}' | paste -sd, -)\"/" $HOME/.story/story/config/config.toml
             echo "Restarting the services"
-            sudo systemctl restart story
-            sudo systemctl restart story-geth
+            sudo systemctl restart story story-geth
             echo
             ;;
-        "2") # Update Story Node
-            echo "stopping the services"
-            sudo systemctl stop story
-            sudo systemctl stop story-geth
-            rm /bin/geth | rm /bin/story
-            installStoryConsensus
-            installStoryGeth
-            echo "Starting the services"
-            sudo systemctl start story
-            sudo systemctl start story-geth
+        "2") # Update Story Consensus
+            latestStoryVersion=$(curl -s https://api.github.com/repos/piplabs/story/releases/latest | grep tag_name | cut -d\" -f4)
+            story version &> ver.txt
+            installedStoryVersion=$(grep Version ver.txt | awk '{print $2}' && rm ver.txt)
+            echo "Latest Stoy version is: $latestStoryVersion"
+            echo "Installed Story version: $installedStoryVersion"
+            while true; do
+            read -p "Are you sure want to update? (y/n) " yn
+            case $yn in 
+                [yY] ) echo updating...;
+                        echo "stopping the services"
+                        sudo systemctl stop story story-geth
+                        rm /bin/story
+                        installStoryConsensus
+                        echo "Starting the services"
+                        sudo systemctl start story story-geth
+                        echo "Done!"
+                        break;;
+                [nN] ) echo exiting...;
+                    exit;;
+                * ) echo invalid response;;
+            esac
+            done
             echo
             ;;
-        "3") # Create the validator
+        "3") # Update Story Geth
+            latestGethVersion=$(curl -s https://api.github.com/repos/piplabs/story-geth/releases/latest | grep tag_name | cut -d\" -f4)
+            installedGethVersion=$(geth -v)
+            echo "Latest Geth version is: $latestGethVersion"
+            echo "Installed Geth version: $installedGethVersion"
+            while true; do
+            read -p "Are you sure want to update? (y/n) " yn
+            case $yn in 
+                [yY] ) echo Updating...;
+                    echo "stopping the services"
+                    sudo systemctl stop story story-geth
+                    rm /bin/geth
+                    installStoryGeth
+                    echo "Starting the services"
+                    sudo systemctl start story story-geth
+                    echo "Done!"
+                    break;;
+                [nN] ) echo exiting...;
+                    exit;;
+                * ) echo invalid response;;
+            esac
+            done
+            echo
+            ;;
+        "4") # Create the validator
             echo "this will stake 0.5 IP to your validator, make sure you have some in your wallet"
             echo "please enter your private key"
             read -s key
             story validator create --stake 500000000000000000 --private-key $key
             echo
             ;;
-        "4") # Get latest block height
+        "5") # Get latest block height
             curl -s localhost:26657/status | jq .result.sync_info.latest_block_height
             echo
             ;;
-        "5") # Get Validator dashboard link
+        "6") # Get Validator dashboard link
             address=$(cat ~/.story/story/config/priv_validator_key.json | grep address | cut -d\" -f4)
             echo "https://testnet.story.explorers.guru/validator/$address"
             echo
             ;;    
-        "6") # Get Validator Private Key
+        "7") # Get Validator Private Key
             story validator export --export-evm-key
             cat $HOME/.story/story/config/private_key.txt
             echo
             ;;
-        "7") # Start the systemctl services
+        "8") # Start the systemctl services
             echo "Starting the Story and Story Geth services"
             systemctl start story story-geth
             echo
             ;;
-        "8") # Restart the systemctl services
+        "9") # Restart the systemctl services
             echo "Restarting the Story and Story Geth services"
             systemctl restart story story-geth
             echo
             ;;
-        "9") # Stop the systemctl services
+        "0") # Stop the systemctl services
             echo "Stoping the Story and Story Geth services"
             systemctl stop story story-geth
             echo
             ;;
-        "0") # Apply snapshot
+        "s") # Apply snapshot
             block=$(curl -sS https://snapshots.mandragora.io/height.txt)
             echo "This snapshot at block $block is provided by Mandragora"
             echo "Stoping the Story and Story Geth services"
@@ -187,7 +222,7 @@ do
             rm *.lz4
             echo
             ;;    
-        "d") # quit the script entirely
+        "d") # deleting the node
             echo "Deleting the node files and removing its systemctl services"
             systemctl stop story story-geth
             systemctl disable story story-geth
