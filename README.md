@@ -7,7 +7,7 @@ a update function that can install the latest versions when available and a few 
 # It can:
 
 1 Install Story Node<br>
-2 Update Story Consesus<br>
+2 Update Story Consensus<br>
 3 Update Story Geth<br>
 4 Create validator<br>
 5 Get latest block height<br>

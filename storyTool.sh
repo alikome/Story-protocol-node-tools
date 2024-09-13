@@ -7,7 +7,7 @@ mainMenu ()
 {
     echo -e "\033[36m""Story Validator Tools""\e[0m"
     echo "1 Install Story Node"
-    echo "2 Update Story Consesus"
+    echo "2 Update Story Consensus"
     echo "3 Update Story Geth"
     echo "4 Create validator"
     echo "5 Get latest block height"
