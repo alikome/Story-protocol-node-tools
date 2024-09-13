@@ -7,19 +7,21 @@ a update function that can install the latest versions when available and a few 
 # It can:
 
 1 Install Story Node<br>
-2 Update Story Node<br>
-3 Create validator<br>
-4 Get latest block height<br>
-5 Get Validator dashboard link<br>
-6 Get Validator Public and Private Keys<br>
-7 Start the services<br>
-8 Restart the services<br>
-9 Stop the services<br>
-0 Apply the latest Snapshot<br>
-d Delete node
+2 Update Story Consesus<br>
+3 Update Story Geth<br>
+4 Create validator<br>
+5 Get latest block height<br>
+6 Get Validator dashboard link<br>
+7 Get Validator Public and Private Keys<br>
+8 Start the services<br>
+9 Restart the services<br>
+0 Stop the services<br>
+s Apply the latest Snapshot<br>
+d Delete node, This step is irreversible<br>
+q Quit
 
 <p align="center">
-  <img src="https://i.imgur.com/7Wdu7lZ.png" />
+  <img src="https://i.imgur.com/przWz74.png" />
 </p>
 
 Note:  
