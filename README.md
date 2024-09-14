@@ -36,5 +36,5 @@ Note:
 Or
 
     wget https://raw.githubusercontent.com/alikome/Story-Protocol-Node/main/storyTool.sh
-    bash storyTools.sh
+    bash storyTool.sh
 
