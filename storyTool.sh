@@ -60,11 +60,10 @@ installMenu() {
 installStoryGeth () # Story Geth install function
 {
     echo "Getting Story Geth..."
-    wget -qO story-geth.tar.gz $(curl -s https://api.github.com/repos/piplabs/story-geth/releases/latest | grep 'body' | grep -Eo 'https?://[^ ]+geth-linux-amd64[^ ]+' | sed 's/......$//')
-    echo "Extracting and configuring Story Geth..."
-    tar xf story-geth.tar.gz
-    cp geth*/geth /bin
-    rm -rf geth*/ | rm story-geth.tar.gz
+    wget -qO geth $(curl -s https://api.github.com/repos/piplabs/story-geth/releases/latest | grep 'browser_download_url' | grep 'geth-linux-amd64' | cut -d\" -f4 | head -1)
+    echo "Installing and configuring Story Geth..."
+    cp geth /bin && chmod +x /bin/geth
+    rm geth
 }
 
 installStoryConsensus () # Story Consensus install function
